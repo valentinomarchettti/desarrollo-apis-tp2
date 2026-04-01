@@ -1,14 +1,18 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Categoria
-from .serializers import CategoriaSerializer
+from .models import Categoria, Anuncio
+from .serializers import CategoriaSerializer, AnuncioSerializer
 from django.shortcuts import get_object_or_404
+from apps.usuario.models import Usuario
+
+# Vistas para Categorias
 class CategoriaListaAPIView(APIView):
     def get(self, request, format=None):
         categorias= Categoria.objects.all()
         serializer= CategoriaSerializer(categorias, many=True)
         return Response(serializer.data)
+
     def post(self, request, format=None):
         serializer= CategoriaSerializer(data=request.data)
         if serializer.is_valid():
@@ -16,9 +20,7 @@ class CategoriaListaAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class CategoriaDetalleAPIView(APIView):
-
     def get(self, request, pk, format=None):
         categoria = get_object_or_404(Categoria, pk=pk)  # Sin espacio antes del (
         serializer = CategoriaSerializer(categoria)
@@ -35,4 +37,37 @@ class CategoriaDetalleAPIView(APIView):
     def delete(self, request, pk, format=None):
         categoria = get_object_or_404(Categoria, pk=pk)
         categoria.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Vistas para Anuncios
+class AnuncioListaAPIView(APIView):
+    def get(self, request, format=None):
+        anuncios = Anuncio.objects.all()
+        serializer = AnuncioSerializer(anuncios, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = AnuncioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(publicado_por=get_object_or_404(Usuario, id=1)) 
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AnuncioDetalleAPIView(APIView):
+    def get(self, request, pk, format=None):
+        anuncio = get_object_or_404(Anuncio, pk=pk)
+        serializer = AnuncioSerializer(anuncio)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        anuncio = get_object_or_404(Anuncio, pk=pk)
+        serializer = AnuncioSerializer(anuncio, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        anuncio = get_object_or_404(Anuncio, pk=pk)
+        anuncio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
