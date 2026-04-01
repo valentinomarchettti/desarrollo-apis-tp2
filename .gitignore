@@ -1,0 +1,15 @@
+# Entorno virtual
+venv/
+env/
+.venv/
+
+# Base de datos local
+*.sqlite3
+
+# Archivos de PyCharm o VSCode
+.idea/
+.vscode/
+
+# Python cache
+__pycache__/
+*.py[cod]

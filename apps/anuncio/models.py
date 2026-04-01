@@ -29,7 +29,7 @@ class Anuncio(models.Model):
         ordering = ('fecha_inicio',)
 
     def __str__(self):
-        return f'{self.titulo} - {'Activo' if self.activo else 'Inactivo'} '
+        return f"{self.titulo} - {'Activo' if self.activo else 'Inactivo'}"
 
 
 class SeguimientoAnuncio(models.Model):
