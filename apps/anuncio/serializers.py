@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 
+from django.utils import timezone
+
 from .models import Categoria, Anuncio
 
 
@@ -35,22 +37,36 @@ class AnuncioSerializer(serializers.ModelSerializer):
         ]
         read_only_fields= ['publicado_por', 'oferta_ganadora']
 
+    def validate(self, data):
+        fecha_inicio = data.get('fecha_inicio')
+        fecha_fin = data.get('fecha_fin')
+        precio_inicial = data.get('precio_inicial')
+        categorias = data.get('categorias')
+
+        if fecha_inicio and fecha_inicio <= timezone.now():
+            raise serializers.ValidationError({
+                'fecha_inicio': 'La fecha de inicio debe ser posterior a la fecha actual.'
+            })
+
+        if fecha_inicio and fecha_fin and fecha_fin <= fecha_inicio:
+            raise serializers.ValidationError({
+                'fecha_fin': 'La fecha de fin debe ser posterior a la fecha de inicio.'
+            })
+
+        if precio_inicial is not None and precio_inicial <= 0:
+            raise serializers.ValidationError({
+                'precio_inicial': 'El precio inicial debe ser mayor a cero.'
+            })
+
+        if not categorias:
+            raise serializers.ValidationError({
+                'categorias_ids': 'Debe ingresar al menos una categoria.'
+            })
+
+        return data
+
     def create(self, validated_data):
-        categorias_data = validated_data.pop('categorias')
+        categorias = validated_data.pop('categorias')
         anuncio = Anuncio.objects.create(**validated_data)
-
-        for categoria_data in categorias_data:
-            categoria_id = categoria_data.id
-            if categoria_id:
-                try:
-                    categoria = Categoria.objects.get(id=categoria_id)
-                    anuncio.categorias.add(categoria)
-                except Categoria.DoesNotExist:
-                    raise serializers.ValidationError({
-                        "categorias_ids": [f"La categoría con id {categoria_id} no existe."]
-                    })
-
-        if not categorias_data:
-            raise serializers.ValidationError({"categorias_ids": [f"Debe ingresar al menos una categoria."]})
-
+        anuncio.categorias.set(categorias)
         return anuncio
