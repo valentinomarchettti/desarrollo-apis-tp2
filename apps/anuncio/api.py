@@ -1,4 +1,5 @@
-from rest_framework import status, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -118,12 +119,33 @@ class AnuncioDetalleGenericView(RetrieveUpdateDestroyAPIView):
 class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['nombre', 'activa']
+    ordering_fields = ['nombre', 'activa']
+    ordering = ['nombre']
 
 
 # Anuncio viewset
 class AnuncioViewSet(viewsets.ModelViewSet):
     queryset = Anuncio.objects.all()
     serializer_class = AnuncioSerializer
+    filterset_fields = [
+        'titulo',
+        'activo',
+        'precio_inicial',
+        'fecha_inicio',
+        'fecha_fin',
+        'categorias',
+        'publicado_por',
+    ]
+    ordering_fields = [
+        'titulo',
+        'precio_inicial',
+        'fecha_inicio',
+        'fecha_fin',
+        'activo',
+    ]
+    ordering = ['fecha_inicio']
 
     def perform_create(self, serializer):
         serializer.save(publicado_por=get_object_or_404(Usuario, id=1))

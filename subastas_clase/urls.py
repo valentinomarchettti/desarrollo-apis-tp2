@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('anuncio/', include('apps.anuncio.url')),
     path('view-set/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
 ]
