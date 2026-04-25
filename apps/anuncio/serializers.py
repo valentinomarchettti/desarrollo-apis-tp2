@@ -36,7 +36,7 @@ class AnuncioSerializer(serializers.ModelSerializer):
             'oferta_ganadora'
         ]
         read_only_fields= ['publicado_por', 'oferta_ganadora']
-
+    
     def validate(self, data):
         fecha_inicio = data.get('fecha_inicio')
         fecha_fin = data.get('fecha_fin')

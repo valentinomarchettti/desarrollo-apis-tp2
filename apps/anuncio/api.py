@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from rest_framework.generics import (get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from .models import Categoria, Anuncio
+from .filters import CategoriaFilter, AnuncioFilter
 from .serializers import CategoriaSerializer, AnuncioSerializer
 from django.shortcuts import get_object_or_404
 
@@ -120,32 +121,22 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['nombre', 'activa']
-    ordering_fields = ['nombre', 'activa']
-    ordering = ['nombre']
+    filterset_class = CategoriaFilter
+    ordering_fields = ['nombre', 'id']
 
 
 # Anuncio viewset
 class AnuncioViewSet(viewsets.ModelViewSet):
     queryset = Anuncio.objects.all()
     serializer_class = AnuncioSerializer
-    filterset_fields = [
-        'titulo',
-        'activo',
-        'precio_inicial',
-        'fecha_inicio',
-        'fecha_fin',
-        'categorias',
-        'publicado_por',
-    ]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = AnuncioFilter
     ordering_fields = [
         'titulo',
         'precio_inicial',
         'fecha_inicio',
-        'fecha_fin',
-        'activo',
+        'id',
     ]
-    ordering = ['fecha_inicio']
 
     def perform_create(self, serializer):
         serializer.save(publicado_por=get_object_or_404(Usuario, id=1))
