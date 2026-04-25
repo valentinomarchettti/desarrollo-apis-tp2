@@ -1,0 +1,149 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 4297 >>
+stream
+BT /F2 17 Tf 48 794 Td (Analisis de commits - TP4 API de Subastas) Tj ET
+BT /F1 10,5 Tf 48 765 Td (Rama analizada: feature/Paula-Valentino-TP4. La rama tiene dos commits por encima de) Tj ET
+BT /F1 10,5 Tf 48 750 Td (main: uno firmado por valentinomarchettti y otro por Paula Rojas Frias. Este documento) Tj ET
+BT /F1 10,5 Tf 48 735 Td (resume que cambio cada persona, que decisiones tecnicas tomaron y como funcionan esas) Tj ET
+BT /F1 10,5 Tf 48 720 Td (piezas en Django REST Framework.) Tj ET
+BT /F2 13 Tf 48 696 Td (Resumen de commits) Tj ET
+BT /F1 10,2 Tf 60 675 Td (- 300cfed - valentinomarchettti - feat: agregar validaciones a las operaciones de) Tj ET
+BT /F1 10,2 Tf 60 660,3 Td (anuncios. Toca apps/anuncio/serializers.py.) Tj ET
+BT /F1 10,2 Tf 60 643,6 Td (- 1966463 - Paula Rojas Frias - feat: agregar filtros y orden en la consulta de) Tj ET
+BT /F1 10,2 Tf 60 628,9 Td (categorias y anuncios, versionado por url. Toca apps/anuncio/api.py,) Tj ET
+BT /F1 10,2 Tf 60 614,2 Td (subastas_clase/settings.py, subastas_clase/urls.py y db.sqlite3.) Tj ET
+BT /F2 13 Tf 48 593,5 Td (1. Cambios de Valentino) Tj ET
+BT /F1 10,5 Tf 48 572,5 Td (El primer commit se concentra en AnuncioSerializer. La decision principal fue mover) Tj ET
+BT /F1 10,5 Tf 48 557,5 Td (reglas de negocio al serializer, que es el lugar donde DRF transforma y valida los) Tj ET
+BT /F1 10,5 Tf 48 542,5 Td (datos recibidos antes de crear o modificar un modelo.) Tj ET
+BT /F1 10,5 Tf 48 522,5 Td (Se agrego el metodo validate\(self, data\). Este metodo es una validacion a nivel) Tj ET
+BT /F1 10,5 Tf 48 507,5 Td (objeto: DRF primero valida tipos y campos individuales, y despues llama a validate) Tj ET
+BT /F1 10,5 Tf 48 492,5 Td (para reglas que dependen de varios campos al mismo tiempo.) Tj ET
+BT /F1 10,2 Tf 60 472,5 Td (- fecha_inicio debe ser posterior al momento actual.) Tj ET
+BT /F1 10,2 Tf 60 455,8 Td (- fecha_fin debe ser posterior a fecha_inicio.) Tj ET
+BT /F1 10,2 Tf 60 439,1 Td (- precio_inicial debe ser mayor que cero.) Tj ET
+BT /F1 10,2 Tf 60 422,4 Td (- categorias_ids debe incluir al menos una categoria.) Tj ET
+BT /F1 10,5 Tf 48 405,7 Td (La comparacion de fechas usa django.utils.timezone.now\(\). Eso es importante porque el) Tj ET
+BT /F1 10,5 Tf 48 390,7 Td (proyecto usa USE_TZ = True, entonces Django trabaja con fechas timezone-aware. Usar) Tj ET
+BT /F1 10,5 Tf 48 375,7 Td (timezone.now evita mezclar fechas con y sin zona horaria.) Tj ET
+BT /F1 10,5 Tf 48 355,7 Td (Tambien se simplifico create\(\). Antes se recorria manualmente cada categoria, se) Tj ET
+BT /F1 10,5 Tf 48 340,7 Td (buscaba por id y se agregaba al anuncio. Ahora se aprovecha PrimaryKeyRelatedField:) Tj ET
+BT /F1 10,5 Tf 48 325,7 Td (DRF ya convierte los ids enviados en categorias_ids a instancias reales de Categoria y) Tj ET
+BT /F1 10,5 Tf 48 310,7 Td (valida que existan.) Tj ET
+BT /F1 10,5 Tf 48 290,7 Td (La relacion categorias es ManyToManyField. En Django, primero se crea el objeto) Tj ET
+BT /F1 10,5 Tf 48 275,7 Td (principal para que tenga id, y despues se cargan las relaciones many-to-many. Por eso) Tj ET
+BT /F1 10,5 Tf 48 260,7 Td (el flujo correcto es crear el Anuncio y luego ejecutar) Tj ET
+BT /F1 10,5 Tf 48 245,7 Td (anuncio.categorias.set\(categorias\).) Tj ET
+BT /F1 10,5 Tf 48 225,7 Td (Tambien se mantiene una decision de API muy clara: categorias es read_only y devuelve) Tj ET
+BT /F1 10,5 Tf 48 210,7 Td (objetos completos; categorias_ids es write_only y permite crear o editar usando ids) Tj ET
+BT /F1 10,5 Tf 48 195,7 Td (simples. Asi el request es practico y la respuesta es descriptiva.) Tj ET
+BT /F1 10,5 Tf 48 175,7 Td (Detalle a revisar a futuro: la validacion de categorias funciona bien para crear, pero) Tj ET
+BT /F1 10,5 Tf 48 160,7 Td (puede complicar PATCH o actualizaciones parciales si no se envia categorias_ids. En) Tj ET
+BT /F1 10,5 Tf 48 145,7 Td (ese caso habria que distinguir entre creacion, actualizacion completa y actualizacion) Tj ET
+BT /F1 10,5 Tf 48 130,7 Td (parcial.) Tj ET
+BT /F2 13 Tf 48 106,7 Td (2. Cambios de Paula) Tj ET
+BT /F1 10,5 Tf 48 85,7 Td (El segundo commit agrega capacidades de consulta a los ViewSets: filtros, ordenamiento) Tj ET
+BT /F1 10,5 Tf 48 70,7 Td (y una ruta versionada. Esto hace que la API no solo cree datos correctamente, sino que) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 4391 >>
+stream
+BT /F1 10,5 Tf 48 794 Td (tambien permita consultarlos de forma flexible.) Tj ET
+BT /F1 10,5 Tf 48 774 Td (En settings.py se agrega django_filters a INSTALLED_APPS y se configuran) Tj ET
+BT /F1 10,5 Tf 48 759 Td (DEFAULT_FILTER_BACKENDS con DjangoFilterBackend y OrderingFilter. Los filter backends) Tj ET
+BT /F1 10,5 Tf 48 744 Td (son componentes que DRF aplica sobre el queryset antes de serializar la respuesta.) Tj ET
+BT /F1 10,5 Tf 48 724 Td (El flujo de una consulta GET queda asi: entra el request, el router lo envia al) Tj ET
+BT /F1 10,5 Tf 48 709 Td (ViewSet, el ViewSet parte de su queryset, DRF aplica filtros y ordenamiento, el) Tj ET
+BT /F1 10,5 Tf 48 694 Td (serializer convierte los objetos a JSON y finalmente se devuelve la respuesta.) Tj ET
+BT /F1 10,5 Tf 48 674 Td (En CategoriaViewSet se habilitan filtros por nombre y activa, y ordenamiento por esos) Tj ET
+BT /F1 10,5 Tf 48 659 Td (mismos campos. Por ejemplo: /api/v1/categoria/?activa=true,) Tj ET
+BT /F1 10,5 Tf 48 644 Td (/api/v1/categoria/?nombre=Electronica, /api/v1/categoria/?ordering=nombre o) Tj ET
+BT /F1 10,5 Tf 48 629 Td (/api/v1/categoria/?ordering=-nombre.) Tj ET
+BT /F1 10,5 Tf 48 609 Td (En AnuncioViewSet se habilitan filtros por titulo, activo, precio_inicial,) Tj ET
+BT /F1 10,5 Tf 48 594 Td (fecha_inicio, fecha_fin, categorias y publicado_por. Tambien se permite ordenar por) Tj ET
+BT /F1 10,5 Tf 48 579 Td (titulo, precio_inicial, fecha_inicio, fecha_fin y activo.) Tj ET
+BT /F1 10,5 Tf 48 559 Td (Ejemplos de uso: /api/v1/anuncio/?activo=true, /api/v1/anuncio/?categorias=2,) Tj ET
+BT /F1 10,5 Tf 48 544 Td (/api/v1/anuncio/?publicado_por=1, /api/v1/anuncio/?ordering=-precio_inicial y) Tj ET
+BT /F1 10,5 Tf 48 529 Td (/api/v1/anuncio/?ordering=fecha_inicio.) Tj ET
+BT /F1 10,5 Tf 48 509 Td (La decision de usar ordering_fields es buena porque funciona como lista blanca: no se) Tj ET
+BT /F1 10,5 Tf 48 494 Td (puede ordenar por cualquier campo de la base, solo por los campos permitidos. Eso) Tj ET
+BT /F1 10,5 Tf 48 479 Td (mantiene la API mas controlada.) Tj ET
+BT /F1 10,5 Tf 48 459 Td (Tambien se configuro versionado con URLPathVersioning y se agrego la ruta /api/v1/. La) Tj ET
+BT /F1 10,5 Tf 48 444 Td (idea teorica del versionado es poder cambiar la API en el futuro sin romper clientes) Tj ET
+BT /F1 10,5 Tf 48 429 Td (que consumen la version anterior.) Tj ET
+BT /F1 10,5 Tf 48 409 Td (Detalle fino: la ruta actual es fija, api/v1/. Para que URLPathVersioning detecte) Tj ET
+BT /F1 10,5 Tf 48 394 Td (dinamicamente request.version normalmente se usa una ruta con parametro, como) Tj ET
+BT /F1 10,5 Tf 48 379 Td (api/<str:version>/. Para el TP, igualmente queda claro el concepto de exponer la API) Tj ET
+BT /F1 10,5 Tf 48 364 Td (bajo una version.) Tj ET
+BT /F2 13 Tf 48 340 Td (Como se conectan ambos cambios) Tj ET
+BT /F1 10,5 Tf 48 319 Td (Los dos commits se complementan: Valentino refuerza la entrada de datos y Paula mejora) Tj ET
+BT /F1 10,5 Tf 48 304 Td (la salida/consulta de datos. Uno cuida que los anuncios se creen con reglas validas;) Tj ET
+BT /F1 10,5 Tf 48 289 Td (el otro permite buscar, filtrar y ordenar esos anuncios desde la API.) Tj ET
+BT /F1 10,5 Tf 48 269 Td (Cuando alguien hace POST /api/v1/anuncio/, el router envia la request al) Tj ET
+BT /F1 10,5 Tf 48 254 Td (AnuncioViewSet. El serializer valida fechas, precio y categorias. perform_create) Tj ET
+BT /F1 10,5 Tf 48 239 Td (agrega publicado_por. create crea el anuncio y luego setea las categorias) Tj ET
+BT /F1 10,5 Tf 48 224 Td (many-to-many.) Tj ET
+BT /F1 10,5 Tf 48 204 Td (Cuando alguien hace GET /api/v1/anuncio/?activo=true&ordering=-precio_inicial, el) Tj ET
+BT /F1 10,5 Tf 48 189 Td (ViewSet arranca con Anuncio.objects.all\(\), DjangoFilterBackend filtra los activos,) Tj ET
+BT /F1 10,5 Tf 48 174 Td (OrderingFilter ordena por precio inicial descendente, y el serializer arma el JSON) Tj ET
+BT /F1 10,5 Tf 48 159 Td (final.) Tj ET
+BT /F2 13 Tf 48 135 Td (Sobre db.sqlite3) Tj ET
+BT /F1 10,5 Tf 48 114 Td (El commit de Paula tambien modifica db.sqlite3. Como es un archivo binario, Git no) Tj ET
+BT /F1 10,5 Tf 48 99 Td (muestra facilmente que cambio adentro. Probablemente se modifico por pruebas locales o) Tj ET
+BT /F1 10,5 Tf 48 84 Td (datos cargados durante el desarrollo.) Tj ET
+BT /F1 10,5 Tf 48 64 Td (Aunque .gitignore incluye *.sqlite3, si el archivo ya estaba trackeado por Git,) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 711 >>
+stream
+BT /F1 10,5 Tf 48 794 Td (.gitignore no lo deja de seguir automaticamente. En proyectos colaborativos suele) Tj ET
+BT /F1 10,5 Tf 48 779 Td (convenir no versionar db.sqlite3 y usar migraciones o datos semilla cuando hace falta.) Tj ET
+BT /F2 13 Tf 48 755 Td (Verificacion) Tj ET
+BT /F1 10,5 Tf 48 734 Td (Se intento correr manage.py check, pero el entorno local de Python no esta disponible:) Tj ET
+BT /F1 10,5 Tf 48 719 Td (python no esta en PATH, py no encuentra una version instalada y la .venv apunta a un) Tj ET
+BT /F1 10,5 Tf 48 704 Td (Python de WindowsApps inexistente. Por eso este analisis se hizo desde el historial) Tj ET
+BT /F1 10,5 Tf 48 689 Td (Git y el codigo actual, sin ejecutar checks.) Tj ET
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000222 00000 n 
+0000000322 00000 n 
+0000000458 00000 n 
+0000004807 00000 n 
+0000004943 00000 n 
+0000009386 00000 n 
+0000009523 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+10286
+%%EOF

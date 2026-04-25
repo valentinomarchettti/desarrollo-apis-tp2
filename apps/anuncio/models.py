@@ -25,9 +25,6 @@ class Anuncio(models.Model):
     oferta_ganadora = models.OneToOneField('OfertaAnuncio', on_delete=models.SET_NULL,
                                            related_name='oferta_ganadora', blank=True, null=True)
 
-    class Meta:
-        ordering = ('fecha_inicio',)
-
     def __str__(self):
         return f"{self.titulo} - {'Activo' if self.activo else 'Inactivo'}"
 
