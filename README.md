@@ -2,21 +2,6 @@
 
 Proyecto realizado con Django y Django REST Framework para exponer una API orientada a la gestion de categorias y anuncios dentro de una plataforma de subastas.
 
-## Alcance de este README
-
-Este documento resume el historial real revisado en git para que el contenido del repositorio y su evolucion queden alineados.
-
-- Commits y merges observados en el historial: commit inicial, PR #1, PR #2, PR #3, PR #5 y PR #6.
-- No se observa un merge de PR #4 en el historial consultado.
-- El PR #6 aparece mergeado en `origin/main`, por eso se incluye en este resumen historico.
-
-## Estructura principal
-
-- `apps/anuncio/`: modelos, serializers y endpoints de categorias y anuncios.
-- `apps/usuario/`: modelo base de usuario usado por los anuncios y ofertas.
-- `subastas_clase/`: configuracion del proyecto Django, URLs globales y router de DRF.
-- `docs/pruebas_postman.png`: evidencia de pruebas manuales sobre endpoints.
-
 ## Historial de commits y pull requests
 
 ### Commit inicial - `57d8e0b`
