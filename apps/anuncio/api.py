@@ -22,12 +22,12 @@ SEGUNDOS_POR_DIA = SEGUNDOS_POR_HORA * HORAS_POR_DIA
 
 # Vistas para Categorias
 class CategoriaListaAPIView(APIView):
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = CategoriaSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -36,12 +36,12 @@ class CategoriaListaAPIView(APIView):
 
 
 class CategoriaDetalleAPIView(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, *args, **kwargs):
         categoria = get_object_or_404(Categoria, pk=pk)  # Sin espacio antes del (
         serializer = CategoriaSerializer(categoria)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
+    def put(self, request, pk, *args, **kwargs):
         categoria = get_object_or_404(Categoria, pk=pk)
         serializer = CategoriaSerializer(categoria, data=request.data)
         if serializer.is_valid():
@@ -49,7 +49,7 @@ class CategoriaDetalleAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
+    def delete(self, request, pk, *args, **kwargs):
         categoria = get_object_or_404(Categoria, pk=pk)
         categoria.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -57,12 +57,12 @@ class CategoriaDetalleAPIView(APIView):
 
 # Vistas para Anuncios
 class AnuncioListaAPIView(APIView):
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         anuncios = Anuncio.objects.all()
         serializer = AnuncioSerializer(anuncios, many=True)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = AnuncioSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(publicado_por=get_object_or_404(Usuario, id=1))
@@ -71,12 +71,12 @@ class AnuncioListaAPIView(APIView):
 
 
 class AnuncioDetalleAPIView(APIView):
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, *args, **kwargs):
         anuncio = get_object_or_404(Anuncio, pk=pk)
         serializer = AnuncioSerializer(anuncio)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
+    def put(self, request, pk, *args, **kwargs):
         anuncio = get_object_or_404(Anuncio, pk=pk)
         serializer = AnuncioSerializer(anuncio, data=request.data)
         if serializer.is_valid():
@@ -84,7 +84,7 @@ class AnuncioDetalleAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
+    def delete(self, request, pk, *args, **kwargs):
         anuncio = get_object_or_404(Anuncio, pk=pk)
         anuncio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
