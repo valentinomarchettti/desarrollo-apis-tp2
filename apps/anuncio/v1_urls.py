@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .api import (
+from .api.legacy import (
     AnuncioDetalleAPIView,
     AnuncioListaAPIView,
     CategoriaDetalleAPIView,

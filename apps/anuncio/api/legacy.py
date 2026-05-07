@@ -6,12 +6,10 @@ from rest_framework.views import APIView
 from django.utils import timezone
 
 from rest_framework.generics import (get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView)
-from .models import Categoria, Anuncio
-from .filters import CategoriaFilter, AnuncioFilter
-from .serializers import CategoriaSerializer, AnuncioSerializer
+from ..models import Categoria, Anuncio
+from ..filters import CategoriaFilter, AnuncioFilter
+from ..serializers import CategoriaSerializer, AnuncioSerializer
 from django.shortcuts import get_object_or_404
-
-from ..usuario.models import Usuario
 
 SEGUNDOS_POR_MINUTO = 60
 MINUTOS_POR_HORA = 60
@@ -65,7 +63,7 @@ class AnuncioListaAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = AnuncioSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(publicado_por=get_object_or_404(Usuario, id=1))
+            serializer.save(publicado_por=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -108,7 +106,7 @@ class AnuncioListaGenericView(ListCreateAPIView):
     serializer_class = AnuncioSerializer
 
     def perform_create(self, serializer):
-        serializer.save(publicado_por=get_object_or_404(Usuario, id=1))
+        serializer.save(publicado_por=self.request.user)
 
 
 class AnuncioDetalleGenericView(RetrieveUpdateDestroyAPIView):
@@ -139,7 +137,7 @@ class AnuncioViewSet(viewsets.ModelViewSet):
     ]
 
     def perform_create(self, serializer):
-        serializer.save(publicado_por=get_object_or_404(Usuario, id=1))
+        serializer.save(publicado_por=self.request.user)
 
     @action(detail=True, methods=['get'], url_path='tiempo-restante')
     def tiempo_restante(self, request, pk=None):

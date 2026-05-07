@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -12,6 +14,7 @@ class Categoria(models.Model):
 
 
 class Anuncio(models.Model):
+    uuid = models.UUIDField(unique=True, editable=False, default=uuid4)
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField(blank=True)
     precio_inicial = models.DecimalField(decimal_places=2, max_digits=10)
